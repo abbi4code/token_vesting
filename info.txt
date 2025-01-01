@@ -1,0 +1,4 @@
+
+1. we are using backrun to run our program
+
+bankrun will create a client and server and deploy our build program to that client but we need to specify the path of our build program

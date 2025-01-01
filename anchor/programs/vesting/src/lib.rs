@@ -47,7 +47,6 @@ use super::*;
     let curr_time = Clock::get()?.unix_timestamp;
 
     if curr_time < employee_account.cliff_time {
-      // !into means here ??
       return Err(ErrorCode::ClaimNotAvailableYet.into());
     }
 
@@ -77,7 +76,8 @@ use super::*;
     }
 
     // this sets up imp info 
-
+    // here treasury token account hold empliyer spltokens and similary for employee (employee_token_account)
+    //this transferchecked allow use to send data to another program
     let transfer_api_accounts = TransferChecked {
       from: ctx.accounts.treasury_token_account.to_account_info(),
       mint: ctx.accounts.mint.to_account_info(),
@@ -89,7 +89,7 @@ use super::*;
     let cpi_program = ctx.accounts.token_program.to_account_info();
 
     //we require signer seeds 
-
+    // we require treasury account to sign the treasaction but before that we need to derive it using pda
     let signer_seeds: &[&[&[u8]]] = &[
       &[
         b"vesting_treasury",
@@ -195,7 +195,6 @@ pub struct CreateEmployee<'info>{
   #[account(mut)]
   pub owner: Signer<'info>,
 
-  // !what is system account
   pub beneficiary: SystemAccount<'info>,
 
   //making sure that the owner of the vesting account is the signer of this instruction
